@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface DummyRepository : JpaRepository<DummyEntity, UUID>
+interface AdRepository : JpaRepository<Ad, UUID>

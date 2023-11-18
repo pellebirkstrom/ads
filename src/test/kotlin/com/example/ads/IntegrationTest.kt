@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.TestConstructor
 import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -19,5 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     mergeMode = MERGE_WITH_DEFAULTS,
 )
 @AutoConfigureEmbeddedDatabase
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @FlywayTest // Each test will get a clean and migrated DB
 annotation class IntegrationTest
