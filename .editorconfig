@@ -1,0 +1,15 @@
+[*]
+# Align on this so that our editors don't reformat all the time.
+# New lines at the end of a file is nice for command line tools.
+insert_final_newline = true
+
+# Align on this so that our editors don't reformat all the time
+max_line_length = 120
+
+# Otherwise ktlint will complain
+trim_trailing_whitespace = true
+
+# Ktlint specific
+# Disable max_line_length since ktlint does not allow ANY line (strings, function names in tests) to be longer than that
+ktlint_standard_max-line-length = disabled
+ktlint_standard_import-ordering = disabled
