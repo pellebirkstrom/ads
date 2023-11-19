@@ -2,7 +2,7 @@
 
 Ads service
 
-This service is built using Spring Boot 3 configured for building with java 17.
+This service is built using Kotlin and Spring Boot 3 configured for building with java 17.
 
 Technologies used:
 
