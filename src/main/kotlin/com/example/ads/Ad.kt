@@ -2,6 +2,7 @@ package com.example.ads
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import java.time.Instant
 import java.util.UUID
 
 @Entity
@@ -11,4 +12,5 @@ class Ad(
     val body: String,
     val price: Int?,
     val email: String,
+    val createdAt: Instant,
 )
