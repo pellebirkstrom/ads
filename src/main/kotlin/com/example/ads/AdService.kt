@@ -1,5 +1,7 @@
 package com.example.ads
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,33 +17,26 @@ class AdService(private val adRepository: AdRepository) {
         body: String,
         price: Int?,
         email: String,
-    ): Ad {
-        return adRepository.save(
-            Ad(
-                id = UUID.randomUUID(),
-                subject = subject,
-                body = body,
-                price = price,
-                email = email,
-                createdAt = Instant.now(),
-            ),
-        )
-    }
+    ): Ad = adRepository.save(
+        Ad(
+            id = UUID.randomUUID(),
+            subject = subject,
+            body = body,
+            price = price,
+            email = email,
+            createdAt = Instant.now(),
+        ),
+    )
 
     @Transactional
-    fun getAdById(id: UUID): Ad? {
-        return adRepository.findByIdOrNull(id)
-    }
+    fun getAdById(id: UUID): Ad? = adRepository.findByIdOrNull(id)
 
     @Transactional
-    fun getAllAds(): List<Ad> {
-        return adRepository.findAll()
-    }
+    fun getAds(pageable: Pageable): Page<Ad> = adRepository.findAll(pageable)
 
     @Transactional
-    fun deleteAdById(id: UUID): Ad? {
-        return adRepository.findByIdOrNull(id)?.also {
+    fun deleteAdById(id: UUID): Ad? =
+        adRepository.findByIdOrNull(id)?.also {
             adRepository.delete(it)
         }
-    }
 }

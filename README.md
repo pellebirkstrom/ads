@@ -51,6 +51,10 @@ curl -X POST http://localhost:8080/ads \
 curl -X GET http://localhost:8080/ads/423bb38b-bf8e-45d8-85d8-2ffb7678aba7
 ```
 ```bash
-# Get all ads
+# Get list of ads with default order and page size
 curl -X GET http://localhost:8080/ads
+```
+```bash
+# Get list of ads with set ordering, direction and page size
+curl -X GET http://localhost:8080/ads?sortBy=createdAt&direction=desc&size=100
 ```
