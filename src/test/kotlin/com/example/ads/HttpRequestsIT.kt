@@ -4,14 +4,17 @@ import kotlin.random.Random
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import java.util.UUID
 
 @IntegrationTest
 class HttpRequestsIT(
     @LocalServerPort private val port: Int,
-    private val httpClient: TestRestTemplate
+    private val httpClient: TestRestTemplate,
 ) {
 
     @Test
@@ -54,7 +57,7 @@ class HttpRequestsIT(
             // "subject" to "subject", <== missing
             "body" to "subject",
             "price" to 100,
-            "email" to "foo@bar.com"
+            "email" to "foo@bar.com",
         )
 
         val response = httpClient.postForEntity("http://localhost:$port/ads", invalidRequestBody, String::class.java)
@@ -68,7 +71,7 @@ class HttpRequestsIT(
             "subject" to "subject",
             // "body" to "body", <== missing
             "price" to 100,
-            "email" to "foo@bar.com"
+            "email" to "foo@bar.com",
         )
 
         val response = httpClient.postForEntity("http://localhost:$port/ads", invalidRequestBody, String::class.java)
@@ -108,7 +111,6 @@ class HttpRequestsIT(
         assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
-
     @Test
     fun `should return Http NOT_FOUND for an unknown ad`() {
         val response = httpClient.getForEntity("http://localhost:$port/ads/${randomId()}", String::class.java)
@@ -120,7 +122,7 @@ class HttpRequestsIT(
         val requestBody = createAdRequestBody()
         val createdAdId = httpClient.postForEntity("http://localhost:$port/ads", requestBody, Ad::class.java).body!!.id
 
-        val response = httpClient.getForEntity("http://localhost:$port/ads/${createdAdId}", Ad::class.java)
+        val response = httpClient.getForEntity("http://localhost:$port/ads/$createdAdId", Ad::class.java)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body?.id).isNotNull
@@ -129,6 +131,25 @@ class HttpRequestsIT(
         assertThat(response.body?.price).isEqualTo(requestBody.price)
         assertThat(response.body?.email).isEqualTo(requestBody.email)
     }
+
+    @Test
+    fun `should return all ads with default ordering and return newest first`() {
+        val createdAds = createAds(3)
+
+        val response: ResponseEntity<List<Ad>> = httpClient.getForEntity(
+            "http://localhost:$port/ads",
+            object : ParameterizedTypeReference<List<Ad>>() {},
+        )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body?.size).isGreaterThanOrEqualTo(0)
+        assertThat(response.body?.size).isEqualTo(3)
+    }
+
+    private fun createAds(count: Int): List<Ad> =
+        (0 until count).map {
+            httpClient.postForEntity("http://localhost:$port/ads", createAdRequestBody(), Ad::class.java).body!!
+        }
 
     private fun createAdRequestBody(price: Int? = Random.nextInt(), email: String? = null): CreateAdRequest =
         CreateAdRequest(
