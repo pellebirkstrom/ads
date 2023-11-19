@@ -43,8 +43,9 @@ class RestController(
     fun deleteAdById(@PathVariable id: UUID): Ad =
         adService.deleteAdById(id) ?: throw ResponseStatusException(NOT_FOUND)
 
-    // TODO: Add tests
+    // TODO: Add tests - DONE
     // TODO: Add pagination and sort
     // TODO: Add Docker packaging
     // TODO: Maybe propate exception message to the client
+    // TODO: Maybe add a unit test for sake of conversation?
 }

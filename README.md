@@ -43,7 +43,7 @@ curl -X POST http://localhost:8080/ads \
            "subject":"This is a subject",
            "body":"This is a body",
            "price":100,
-           "email":"example@email.com"
+           "email":"foo@bar.com"
          }'
 ```
 ```bash
