@@ -36,36 +36,18 @@ docker compose -f postgres/docker-compose.yml up
 ./mvnw spring-boot:run -Dspring.profiles.active=dev
 ```
 
+## How-to run a specific test case
+
+To run a specific test case from the command line, use the following command:
+
+```bash
+./mvnw -Dtest=com.example.ads.AdRepositoryIT#shouldReadAndWriteAdEntity
+```
+
 ## Interact with the API
 
 ```bash
 # Create an ad
 curl -X POST http://localhost:8080/ads \
      -H "Content-Type: application/json" \
-     -d '{
-           "subject":"This is a subject",
-           "body":"This is a body",
-           "price":100,
-           "email":"foo@bar.com"
-         }'
-```
-
-```bash
-# Get one ad by id
-curl -X GET http://localhost:8080/ads/423bb38b-bf8e-45d8-85d8-2ffb7678aba7
-```
-
-```bash
-# Get list of ads with default order and page size
-curl -X GET http://localhost:8080/ads
-```
-
-```bash
-# Get list of ads with set ordering, direction and page size
-curl -X GET http://localhost:8080/ads?sortBy=createdAt&direction=desc&size=100
-```
-
-```bash
-# Delete ad by id
-curl -X DELETE http://localhost:8080/ads/423bb38b-bf8e-45d8-85d8-2ffb7678aba7
-```
+     -
